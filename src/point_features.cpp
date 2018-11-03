@@ -64,38 +64,45 @@ int main(int argc, char *argv[])
         //clear previous points
         point_set.clear();
 
+        //detect and compute(extract) features
+        //orb_detector->detectAndCompute(image, cv::noArray(), point_set, descriptor_set);
+        //use 4 mask for detect features points
         for(int i=0; i<4; i++)
         {
           cv::Mat mask = cv::Mat::zeros(image.size(), CV_8U);
           if (i==0)
           {
-            cv::Mat roi(mask, cv::Rect(0, 0, image.rows/2, image.cols/2));
+            cv::Mat roi(mask, cv::Rect(0, 0, image.cols/2, image.rows/2));
             roi = cv::Scalar(255);
             orb_detector->detectAndCompute(image, mask, point_set, descriptor_set);
+            cv::drawKeypoints( image, point_set, image, 255, cv::DrawMatchesFlags::DEFAULT );
+            cv::imshow("Output Window Mask 0", mask); //show mask
           }
           if (i==1)
           {
-            cv::Mat roi(mask, cv::Rect(image.rows/2, 0, image.rows/2, image.cols/2));
+            cv::Mat roi(mask, cv::Rect(image.cols/2, 0, image.cols/2, image.rows/2));
             roi = cv::Scalar(255);
             orb_detector->detectAndCompute(image, mask, point_set, descriptor_set);
+            cv::drawKeypoints( image, point_set, image, 255, cv::DrawMatchesFlags::DEFAULT );
+            cv::imshow("Output Window Mask 1", mask); //show mask
           }
           if (i==2)
           {
-            cv::Mat roi(mask, cv::Rect(0, image.cols/2, image.rows/2, image.cols/2));
+            cv::Mat roi(mask, cv::Rect(0, image.rows/2, image.cols/2, image.rows/2));
             roi = cv::Scalar(255);
             orb_detector->detectAndCompute(image, mask, point_set, descriptor_set);
+            cv::drawKeypoints( image, point_set, image, 255, cv::DrawMatchesFlags::DEFAULT );
+            cv::imshow("Output Window Mask 2", mask); //show mask
           }
           if (i==3)
           {
-            cv::Mat roi(mask, cv::Rect(image.rows/2, image.cols/2, image.rows/2, image.cols/2));
+            cv::Mat roi(mask, cv::Rect(image.cols/2, image.rows/2, image.cols/2, image.rows/2));
             roi = cv::Scalar(255);
-            orb_detector->detectAndCompute(image, mask, point_set, descriptor_set);
+            cv::drawKeypoints( image, point_set, image, 255, cv::DrawMatchesFlags::DEFAULT );
+            cv::imshow("Output Window Mask 3", mask); //show mask
           }
-
         }
 
-        //detect and compute(extract) features
-        //orb_detector->detectAndCompute(image, cv::noArray(), point_set, descriptor_set);
         //creat mask
         //mask=image;
         //mask.rows=image.rows/4;
@@ -127,8 +134,6 @@ int main(int argc, char *argv[])
 
         //show image
         cv::imshow("Output Window", image);
-        //show mask
-        //cv::imshow("Output Window Mask", mask);
 
 		//Waits 30 millisecond to check if 'q' key has been pressed. If so, breaks the loop. Otherwise continues.
     	if( (unsigned char)(cv::waitKey(30) & 0xff) == 'q' ) break;
